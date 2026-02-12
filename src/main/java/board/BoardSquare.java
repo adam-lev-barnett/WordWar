@@ -5,8 +5,11 @@ import exceptions.InvalidBoardSquareException;
 public class BoardSquare {
     boolean filled = false;
     BoardSquareEffect effect;
-    Coordinate coordinate;
     LetterTile tile = null;
+
+    public BoardSquare(BoardSquareEffect effect) {
+        this.effect = effect;
+    }
 
     public boolean isFilled() {
         return filled;
@@ -23,15 +26,6 @@ public class BoardSquare {
     public void setEffect(BoardSquareEffect effect) throws InvalidBoardSquareException {
         if (effect == null) throw new InvalidBoardSquareException("Board square must have BoardSquareEffect");
         this.effect = effect;
-    }
-
-    public Coordinate getCoordinate() {
-        return coordinate;
-    }
-
-    // Only two characters, "{letter}{number}"
-    public void setCoordinate(Coordinate coordinate) {
-        this.coordinate = coordinate;
     }
 
     public LetterTile getTile() {
