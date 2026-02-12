@@ -36,6 +36,11 @@ public class BoardSquare {
         this.tile = tile;
     }
 
+    @Override
+    public String toString() {
+        return this.effect.toString();
+    }
+
 
 
 }
