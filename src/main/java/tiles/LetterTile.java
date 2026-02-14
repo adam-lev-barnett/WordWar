@@ -1,8 +1,9 @@
-package board;
+package tiles;
 
 import exceptions.InvalidPointValueException;
 import exceptions.InvalidTileCharacterException;
 
+/** Tile representing a capital letter with a point value determined by the TileFactory*/
 public class LetterTile {
 
     private char letter;
@@ -18,7 +19,8 @@ public class LetterTile {
         return pointValue;
     }
 
-    public void setPointValue(int pointValue) throws InvalidPointValueException {
+    // Package protected so that only TileFactory has access
+    void setPointValue(int pointValue) throws InvalidPointValueException {
         if (pointValue < 0 || pointValue > 10) throw new InvalidPointValueException();
         this.pointValue = pointValue;
     }
@@ -27,12 +29,12 @@ public class LetterTile {
         return letter;
     }
 
-    // By default, letters will be lowercase
+    // By default, letters will be uppercase
     public void setLetter(char letter) throws InvalidTileCharacterException {
         if ((letter <= 'A' || letter >= 'z') && (letter != ' ')) {
             throw new InvalidTileCharacterException();
         }
-        this.letter = Character.toLowerCase(letter);
+        this.letter = Character.toUpperCase(letter);
     }
 
 }

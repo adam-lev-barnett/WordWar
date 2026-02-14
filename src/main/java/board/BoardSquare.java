@@ -1,7 +1,11 @@
 package board;
 
 import exceptions.InvalidBoardSquareException;
+import tiles.LetterTile;
 
+/** Main component that makes up the game board.
+ *  Each square has an associated effect (or 'plain' effect) that affects the turn.
+ *  List of effects is represented by the BoardSquareEffect enum*/
 public class BoardSquare {
     boolean filled = false;
     BoardSquareEffect effect;

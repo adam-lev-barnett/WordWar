@@ -1,6 +1,5 @@
 package board;
 
-import exceptions.InvalidBoardSquareException;
 
 import java.util.Arrays;
 
@@ -9,7 +8,7 @@ import static board.BoardSquareEffect.*;
 // Hard-coded dimensions for now to mimic Scrabble board
 public class GameBoard {
 
-    private BoardSquare[][] gameBoard = new BoardSquare[15][15];
+    private final BoardSquare[][] gameBoard = new BoardSquare[15][15];
 
     public GameBoard() {
         gameBoard[0][0] = new BoardSquare(TRIPLE_WORD_SCORE);
@@ -149,6 +148,7 @@ public class GameBoard {
 
     }
 
+    // Test to make sure that the gameboard is constructed properly
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
