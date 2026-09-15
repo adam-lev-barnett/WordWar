@@ -1,7 +1,9 @@
 package tiles;
 
+import exceptions.EmptyBagException;
 import exceptions.InvalidPointValueException;
-import exceptions.InvalidTileCharacterException;
+import exceptions.InvalidTileException;
+import player.Player;
 
 import java.util.*;
 
@@ -13,6 +15,10 @@ public class LetterBag {
     private static final Map<Character, Integer> lettersDistribution = new HashMap<Character, Integer>();
     private final Queue<LetterTile> bag = new ArrayDeque<>();
     private final List<LetterTile> tiles = new ArrayList<>();
+
+    /** Maximum number of tiles allowed in a given player's hand*/
+    private final static int MAX_TILES = 7;
+
 
     // Counts of each letter for populating bag of tiles
     static {
@@ -57,7 +63,7 @@ public class LetterBag {
             for (int i = lettersDistribution.get(c) - 1; i >= 0; i--) {
                 try {
                     tiles.add(TileFactory.createLetterTile(c));
-                } catch (InvalidTileCharacterException | InvalidPointValueException e) {
+                } catch (InvalidTileException | InvalidPointValueException e) {
                     throw new RuntimeException("Illegal letter tile found");
                 }
             }
@@ -80,6 +86,22 @@ public class LetterBag {
         }
         Collections.shuffle(tiles);
         fillBag();
+    }
+
+    public void drawTiles(Player player) {
+        if (tiles.isEmpty()) throw new EmptyBagException("Cannot draw from empty bag");
+        List<LetterTile> hand = player.getHand();
+        int toDraw = MAX_TILES - hand.size();
+        while (!bag.isEmpty() && toDraw > 0) {
+            hand.add(bag.poll());
+            toDraw--;
+        }
+    }
+
+    public void returnTile(List<LetterTile> tiles) throws InvalidTileException {
+        if (tiles == null) throw new InvalidTileException();
+        bag.addAll(tiles);
+        shuffleTiles();
     }
 
     /** Queried as players draw tiles from the bag to prevent exceptions.

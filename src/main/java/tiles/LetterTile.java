@@ -1,7 +1,7 @@
 package tiles;
 
 import exceptions.InvalidPointValueException;
-import exceptions.InvalidTileCharacterException;
+import exceptions.InvalidTileException;
 
 /** Tile representing a capital letter with a point value determined by the TileFactory*/
 public class LetterTile {
@@ -10,7 +10,7 @@ public class LetterTile {
     private int pointValue;
 
 
-    public LetterTile(char letter, int pointValue) throws InvalidTileCharacterException, InvalidPointValueException {
+    public LetterTile(char letter, int pointValue) throws InvalidTileException, InvalidPointValueException {
         setLetter(letter);
         setPointValue(pointValue);
     }
@@ -30,9 +30,9 @@ public class LetterTile {
     }
 
     // By default, letters will be uppercase
-    public void setLetter(char letter) throws InvalidTileCharacterException {
+    public void setLetter(char letter) throws InvalidTileException {
         if ((letter <= 'A' || letter >= 'z') && (letter != ' ')) {
-            throw new InvalidTileCharacterException();
+            throw new InvalidTileException();
         }
         this.letter = Character.toUpperCase(letter);
     }

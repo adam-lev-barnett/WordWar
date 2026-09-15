@@ -1,7 +1,16 @@
 package board;
 
 
+import exceptions.InvalidMoveException;
+import mechanics.dictionary.Dictionary;
+import mechanics.pieceplacement.Direction;
+import mechanics.turn.Submission;
+import mechanics.turn.scoring.ScoreCalculator;
+import tiles.LetterTile;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static board.BoardSquareEffect.*;
 
@@ -148,6 +157,9 @@ public class GameBoard {
 
     }
 
+
+
+
     // Test to make sure that the gameboard is constructed properly
     @Override
     public String toString() {
@@ -160,12 +172,159 @@ public class GameBoard {
         return sb.toString();
     }
 
+    public boolean validateMove(Submission submission) {
+
+        if (submission == null) return false;
+
+        int row = submission.row();
+        int col = submission.col();
+        // Can't play tiles beyond bounds of board
+        if (gameBoard[0].length - row < 0 && gameBoard.length - col < 0) return false;
+
+        if (Dictionary.INSTANCE.validateWord(buildWord(submission))) {
+            /*  Initialize list of covered bonus effects to send to score calculator to process
+                Each effect list index corresponds to the index of the tile placed on it
+             */
+            List<BoardSquareEffect> accumulatedEffects = new ArrayList<>();
+            if (submission.direction() == Direction.HORIZONTAL) {
+                int currentCol = col;
+                for (LetterTile tile : submission.tiles()) {
+                    gameBoard[row][col].setTile(tile);
+                    accumulatedEffects.add(gameBoard[row][col].getEffect());
+                    currentCol++;
+                }
+            }
+
+            boolean isBingo = validateBingo(submission);
+            int score = ScoreCalculator.INSTANCE.calculateScore(submission.tiles(), accumulatedEffects, validateBingo();
+        }
+    }
+
+    public void placeWord(Submission submission) {
+        int row = submission.row();
+        int col = submission.col();
+        // Surround with try/catch so that we can validate as we go but roll back everything if it doesn't work
+        if (submission.direction() == Direction.HORIZONTAL) {
+            if (submission.tiles().size() >= gameBoard[0].length) throw new InvalidMoveException("Move will exceed board bounds");
+            for (LetterTile tile : submission.tiles()) {
+                gameBoard[row][col].setTile(tile);
+                col++;
+            }
+        }
+        else {
+            if (submission.tiles().size() >= gameBoard.length) throw new InvalidMoveException("Move will exceed board bounds");
+            for (LetterTile tile : submission.tiles()) {
+                gameBoard[row][col].setTile(tile);
+                row++;
+            }
+        }
+    }
+
+    //TODO
+    private boolean validateBingo(Submission submission) {
+        return false;
+    }
+
+    private String buildWord(Submission submission) {
+        int row = submission.row();
+        int col = submission.col();
+        int numTiles = submission.tiles().size();
+
+        StringBuilder sb = new StringBuilder();
+
+        // Beginning of word
+        sb.append(getStartOfWord(row, col, submission.direction()));
+
+        // Tiles
+        for (LetterTile tile : submission.tiles()) {
+            sb.append(tile.getLetter());
+        }
+
+        // End of word
+        if (submission.direction() == Direction.HORIZONTAL) sb.append(getEndOfWord(row, col + numTiles, submission.direction()));
+        else sb.append(getEndOfWord(row + numTiles, col, submission.direction()));
+
+        return sb.toString();
+    }
+
+        /* Need to:
+            1. Append front of word
+            2. Append back of word
+         */
+
+
+    private String getStartOfWord(int row, int col, Direction direction) {
+
+        if (direction == null) throw new InvalidMoveException("Direction cannot be null");
+        StringBuilder sb = new StringBuilder();
+
+        if (direction == Direction.HORIZONTAL) {
+            int currentCol = col;
+            while (currentCol > 0 && gameBoard[row][currentCol].isFilled()) {
+                sb.append(gameBoard[row][currentCol].getTile().getLetter());
+                currentCol--;
+            }
+        }
+        else {
+            int currentRow = row;
+            while (currentRow > 0 && gameBoard[currentRow][col].isFilled()) {
+                sb.append(gameBoard[currentRow][col].getTile().getLetter());
+                currentRow--;
+            }
+        }
+
+        // Because we backtracked the tiles, we need to reverse the string builder so that the word is built properly
+        sb.reverse();
+        return sb.toString();
+    }
+
+    private String getEndOfWord(int row, int col, Direction direction) {
+
+        if (direction == null) throw new InvalidMoveException("Direction cannot be null");
+        if (row < 0 ||
+            row >= gameBoard.length ||
+            col < 0 ||
+            col >= gameBoard[row].length)
+            throw new InvalidMoveException("Invalid row or column"
+        );
+
+        StringBuilder sb = new StringBuilder();
+
+        if (direction == Direction.HORIZONTAL) {
+            int currentCol = col;
+            while (currentCol < gameBoard[row].length && gameBoard[row][currentCol].isFilled()) {
+                sb.append(gameBoard[row][currentCol].getTile().getLetter());
+                currentCol++;
+            }
+        }
+        else {
+            int currentRow = row;
+            while (currentRow < gameBoard.length && gameBoard[currentRow][col].isFilled()) {
+                sb.append(gameBoard[currentRow][col].getTile().getLetter());
+                currentRow++;
+            }
+        }
+
+        return sb.toString();
+    }
+
+    private boolean hasAdjacentTiles(Submission submission) {
+        int row = submission.row();
+        int col = submission.col();
+
+
+    }
+
     // Test gameBoard prints correctly
     public static void main(String[] args) {
         GameBoard gameBoardTest = new GameBoard();
         System.out.println(gameBoardTest);
 
     }
+
+
+
+
 
 
 

@@ -1,11 +1,11 @@
 package tiles;
 
 import exceptions.InvalidPointValueException;
-import exceptions.InvalidTileCharacterException;
+import exceptions.InvalidTileException;
 
 public abstract class TileFactory {
 
-    public static LetterTile createLetterTile(char letter) throws InvalidTileCharacterException, InvalidPointValueException {
+    public static LetterTile createLetterTile(char letter) throws InvalidTileException, InvalidPointValueException {
         letter = Character.toUpperCase(letter);
         switch (letter) {
             case 'A' -> {return new LetterTile('A', 1);}
@@ -35,7 +35,7 @@ public abstract class TileFactory {
             case 'Y' -> {return new LetterTile('Y', 4);}
             case 'Z' -> {return new LetterTile('Z', 10);}
             case ' ' -> {return new LetterTile(' ', 0);}
-            default -> {throw new InvalidTileCharacterException();}
+            default -> {throw new InvalidTileException();}
         }
     }
 
