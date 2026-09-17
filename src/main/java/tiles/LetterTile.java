@@ -31,10 +31,11 @@ public class LetterTile {
 
     // By default, letters will be uppercase
     public void setLetter(char letter) throws InvalidTileException {
-        if ((letter <= 'A' || letter >= 'z') && (letter != ' ')) {
+        letter = Character.toUpperCase(letter);
+        if ((letter < 'A' || letter > 'Z') && letter != ' ') {
             throw new InvalidTileException();
         }
-        this.letter = Character.toUpperCase(letter);
+        this.letter = letter;
     }
 
 }

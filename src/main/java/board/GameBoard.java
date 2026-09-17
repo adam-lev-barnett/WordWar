@@ -1,6 +1,7 @@
 package board;
 
 
+import exceptions.InvalidBoardSquareException;
 import exceptions.InvalidMoveException;
 import mechanics.dictionary.Dictionary;
 import mechanics.pieceplacement.Direction;
@@ -181,7 +182,7 @@ public class GameBoard {
         // Can't play tiles beyond bounds of board
         if (gameBoard[0].length - row < 0 && gameBoard.length - col < 0) return false;
 
-        if (Dictionary.INSTANCE.validateWord(buildWord(submission))) {
+        if (Dictionary.INSTANCE.validateWord(buildMainWord(submission))) {
             /*  Initialize list of covered bonus effects to send to score calculator to process
                 Each effect list index corresponds to the index of the tile placed on it
              */
@@ -196,14 +197,13 @@ public class GameBoard {
             }
 
             boolean isBingo = validateBingo(submission);
-            int score = ScoreCalculator.INSTANCE.calculateScore(submission.tiles(), accumulatedEffects, validateBingo();
+            int score = ScoreCalculator.INSTANCE.calculateTotalScore(submission.tiles(), accumulatedEffects, validateBingo();
         }
     }
 
     public void placeWord(Submission submission) {
         int row = submission.row();
         int col = submission.col();
-        // Surround with try/catch so that we can validate as we go but roll back everything if it doesn't work
         if (submission.direction() == Direction.HORIZONTAL) {
             if (submission.tiles().size() >= gameBoard[0].length) throw new InvalidMoveException("Move will exceed board bounds");
             for (LetterTile tile : submission.tiles()) {
@@ -225,7 +225,7 @@ public class GameBoard {
         return false;
     }
 
-    private String buildWord(Submission submission) {
+    private String buildMainWord(Submission submission) {
         int row = submission.row();
         int col = submission.col();
         int numTiles = submission.tiles().size();
@@ -247,10 +247,30 @@ public class GameBoard {
         return sb.toString();
     }
 
-        /* Need to:
-            1. Append front of word
-            2. Append back of word
-         */
+    private List<String> collectWords(Submission submission) {
+        List<String> words = new ArrayList<>();
+        int row = submission.row();
+        int col = submission.col();
+        StringBuilder sb = new StringBuilder();
+
+        Direction oppositeDir = submission.direction() == Direction.HORIZONTAL ? Direction.VERTICAL : Direction.HORIZONTAL;
+        // The crossing words' prefixes need to be checked in the opposite direction of the main word being placed
+        for (LetterTile tile : submission.tiles()) {
+            sb.append(getStartOfWord(row, col, oppositeDir));
+            sb.append(tile.getLetter());
+            sb.append(getEndOfWord(row, col, oppositeDir));
+            words.add(sb.toString());
+            // Re-use SB
+            sb.setLength(0);
+            if (submission.direction() == Direction.HORIZONTAL) col++;
+            else row++;
+        }
+
+        return words;
+
+    }
+
+
 
 
     private String getStartOfWord(int row, int col, Direction direction) {
@@ -308,9 +328,13 @@ public class GameBoard {
         return sb.toString();
     }
 
-    private boolean hasAdjacentTiles(Submission submission) {
-        int row = submission.row();
-        int col = submission.col();
+    private boolean hasAdjacentTiles(int row, int col, Direction direction) throws InvalidBoardSquareException {
+        if (direction == null) throw new InvalidMoveException("Direction cannot be null");
+        if (row < 0 || row >= gameBoard.length || col < 0 || col >= gameBoard[row].length) throw new InvalidBoardSquareException("Square is out of bounds");
+
+        if (direction == Direction.HORIZONTAL) {
+
+        }
 
 
     }
