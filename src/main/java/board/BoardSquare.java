@@ -1,7 +1,7 @@
 package board;
 
 import exceptions.InvalidBoardSquareException;
-import tiles.LetterTile;
+import board.tiles.LetterTile;
 
 /** Main component that makes up the game board.
  *  Each square has an associated effect (or 'plain' effect) that affects the turn.

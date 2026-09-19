@@ -2,11 +2,11 @@ package game;
 
 import board.GameBoard;
 import exceptions.GameInitializationException;
-import exceptions.InvalidTileException;
 import exceptions.NoTilesPlayedException;
+import mechanics.turn.Submission;
 import player.Player;
-import tiles.LetterBag;
-import tiles.LetterTile;
+import board.tiles.LetterBag;
+import board.tiles.LetterTile;
 
 import java.util.List;
 
@@ -18,12 +18,14 @@ public class Game {
     private Player p2;
     private int p1Score;
     private int p2Score;
+    private Player activePlayer;
 
     public Game(Player p1, Player p2) {
         setPlayers(p1, p2);
         this.board = new GameBoard();
         this.p1Score = 0;
         this.p2Score = 0;
+        this.activePlayer = p1;
     }
 
     public GameBoard getBoard() {
@@ -69,6 +71,10 @@ public class Game {
 
         // Validates submitted letters form an accepted word
         if (board.)
+    }
+
+    public void processSubmission() {
+        Submission submission = this.acti
     }
 
 

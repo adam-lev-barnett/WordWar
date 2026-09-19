@@ -1,7 +1,7 @@
 package mechanics.turn;
 
 import mechanics.pieceplacement.Direction;
-import tiles.LetterTile;
+import board.tiles.LetterTile;
 
 import java.util.List;
 

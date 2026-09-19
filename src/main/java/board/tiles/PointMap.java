@@ -1,4 +1,4 @@
-package tiles;
+package board.tiles;
 
 import exceptions.InvalidTileException;
 

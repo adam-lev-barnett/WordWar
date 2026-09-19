@@ -7,18 +7,20 @@ import mechanics.dictionary.Dictionary;
 import mechanics.pieceplacement.Direction;
 import mechanics.turn.Submission;
 import mechanics.turn.scoring.ScoreCalculator;
-import tiles.LetterTile;
+import mechanics.turn.scoring.TileAndEffect;
+import board.tiles.LetterTile;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static board.BoardSquareEffect.*;
+import static mechanics.boardconfig.BoardConfig.*;
 
 // Hard-coded dimensions for now to mimic Scrabble board
 public class GameBoard {
 
-    private final BoardSquare[][] gameBoard = new BoardSquare[15][15];
+    private final BoardSquare[][] gameBoard = new BoardSquare[ROWS][COLS];
 
     public GameBoard() {
         gameBoard[0][0] = new BoardSquare(TRIPLE_WORD_SCORE);
@@ -158,9 +160,6 @@ public class GameBoard {
 
     }
 
-
-
-
     // Test to make sure that the gameboard is constructed properly
     @Override
     public String toString() {
@@ -207,6 +206,7 @@ public class GameBoard {
         if (submission.direction() == Direction.HORIZONTAL) {
             if (submission.tiles().size() >= gameBoard[0].length) throw new InvalidMoveException("Move will exceed board bounds");
             for (LetterTile tile : submission.tiles()) {
+                if (gameBoard[row][col].isFilled()) throw new InvalidMoveException("A tile already occupies this space");
                 gameBoard[row][col].setTile(tile);
                 col++;
             }
@@ -214,6 +214,7 @@ public class GameBoard {
         else {
             if (submission.tiles().size() >= gameBoard.length) throw new InvalidMoveException("Move will exceed board bounds");
             for (LetterTile tile : submission.tiles()) {
+                if (gameBoard[row][col].isFilled()) throw new InvalidMoveException("A tile already occupies this space");
                 gameBoard[row][col].setTile(tile);
                 row++;
             }
@@ -337,6 +338,14 @@ public class GameBoard {
         }
 
 
+    }
+
+    /** Combines submitted tiles with the effects of their respective grid spaces to process scores*/
+    private List<TileAndEffect> pairEffects(Submission submission) {
+        List<TileAndEffect> pairEffects = new ArrayList<>();
+        for (LetterTile tile : submission.tiles()) {
+
+        }
     }
 
     // Test gameBoard prints correctly

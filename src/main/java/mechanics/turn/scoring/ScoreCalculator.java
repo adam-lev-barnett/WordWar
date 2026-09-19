@@ -2,8 +2,8 @@ package mechanics.turn.scoring;
 
 import board.BoardSquareEffect;
 import exceptions.InvalidTileException;
-import tiles.LetterTile;
-import tiles.PointMap;
+import board.tiles.LetterTile;
+import board.tiles.PointMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,5 +57,9 @@ public enum ScoreCalculator {
         }
 
         return score;
+    }
+
+    private int scoreWord(String s) {
+
     }
 }
