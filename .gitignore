@@ -1,6 +1,14 @@
 target/
 *.class
 
+# Android / Gradle
+.gradle/
+build/
+app/build/
+local.properties
+*.hprof
+*.ap_
+
 # IDE
 .idea/
 *.iml
